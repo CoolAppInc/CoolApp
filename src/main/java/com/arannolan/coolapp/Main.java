@@ -39,44 +39,15 @@ public class Main {
     }
 
     /**
-     * Connect to and initialise local DynamoDB.
-     * @return AmazonDynamoDB
-     */
-    public static AmazonDynamoDB initBD() {
-        // connect to local DynamoDB
-        AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard()
-                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration("http://localhost:8000", "us-west-2"))
-                .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials("", "")))
-                .build();
-
-        // check that User table exists, and create if not
-        String tableName = "Users";
-        if (!client.listTables().getTableNames().contains(tableName)) {
-            try {
-                System.out.println("Attempting to create User table; please wait...");
-                // use DynamoDBMapper to create table from annotated User class
-                DynamoDBMapper mapper = new DynamoDBMapper(client);
-                CreateTableRequest req = mapper.generateCreateTableRequest(User.class);
-                req.setProvisionedThroughput(new ProvisionedThroughput(10L, 10L));
-                CreateTableResult result = client.createTable(req);
-                System.out.println("Success.  Table status: " + result.getTableDescription().getTableStatus());
-
-            } catch (Exception e) {
-                System.err.println("Unable to create table: ");
-                System.err.println(e.getMessage());
-            }
-        }
-
-        return client;
-    }
-
-    /**
      * Main method.
      * @param args
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
-        final AmazonDynamoDB dynamoDB = initBD();
+        // Connect to and initialise DynamoDB
+        Database.getInstance();
+
+        // create Grizzly server
         final HttpServer server = startServer();
         System.out.println(String.format("Jersey app started with WADL available at "
                 + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));
