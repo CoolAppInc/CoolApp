@@ -5,8 +5,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
-import com.amazonaws.services.dynamodbv2.document.DynamoDB;
-import com.amazonaws.services.dynamodbv2.document.Table;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.model.*;
 
 import org.glassfish.grizzly.http.server.HttpServer;
@@ -15,7 +14,6 @@ import org.glassfish.jersey.server.ResourceConfig;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.Arrays;
 
 /**
  * Main class.
@@ -42,27 +40,26 @@ public class Main {
 
     /**
      * Connect to and initialise local DynamoDB.
-     * @return DynamoDB
+     * @return AmazonDynamoDB
      */
-    public static DynamoDB initBD() {
+    public static AmazonDynamoDB initBD() {
         // connect to local DynamoDB
         AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard()
                 .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration("http://localhost:8000", "us-west-2"))
                 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials("", "")))
                 .build();
-        DynamoDB dynamoDB = new DynamoDB(client);
 
         // check that User table exists, and create if not
         String tableName = "Users";
-        if (!containsTable(dynamoDB, tableName)) {
+        if (!client.listTables().getTableNames().contains(tableName)) {
             try {
                 System.out.println("Attempting to create User table; please wait...");
-                Table table = dynamoDB.createTable(tableName,
-                        Arrays.asList(new KeySchemaElement("userID", KeyType.HASH)),
-                        Arrays.asList(new AttributeDefinition("userID", ScalarAttributeType.N)),
-                        new ProvisionedThroughput(10L, 10L));
-                table.waitForActive();
-                System.out.println("Success.  Table status: " + table.getDescription().getTableStatus());
+                // use DynamoDBMapper to create table from annotated User class
+                DynamoDBMapper mapper = new DynamoDBMapper(client);
+                CreateTableRequest req = mapper.generateCreateTableRequest(User.class);
+                req.setProvisionedThroughput(new ProvisionedThroughput(10L, 10L));
+                CreateTableResult result = client.createTable(req);
+                System.out.println("Success.  Table status: " + result.getTableDescription().getTableStatus());
 
             } catch (Exception e) {
                 System.err.println("Unable to create table: ");
@@ -70,20 +67,7 @@ public class Main {
             }
         }
 
-        return dynamoDB;
-    }
-
-    /**
-     * Check if DynamoDB contains a table of this name.
-     * @param dynamoDB DynamoDB to be checked against
-     * @param tableName Name to be checked
-     * @return True if dynamoDB contains tableName, otherwise false
-     */
-    public static boolean containsTable(DynamoDB dynamoDB, String tableName) {
-        for (Table table: dynamoDB.listTables()) {
-            if (table.getTableName().equals(tableName)) return true;
-        }
-        return false;
+        return client;
     }
 
     /**
@@ -92,7 +76,7 @@ public class Main {
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
-        final DynamoDB dynamoDB = initBD();
+        final AmazonDynamoDB dynamoDB = initBD();
         final HttpServer server = startServer();
         System.out.println(String.format("Jersey app started with WADL available at "
                 + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));
