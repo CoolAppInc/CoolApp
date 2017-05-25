@@ -44,6 +44,13 @@
             <artifactId>DynamoDBLocal</artifactId>
             <version>[1.11,2.0)</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.restfb</groupId>
+            <artifactId>restfb</artifactId>
+            <version>2.0.0-rc.2</version>
+        </dependency>
+
     </dependencies>
 
     <repositories>
