@@ -1,13 +1,7 @@
 package com.arannolan.coolapp;
 
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.client.builder.AwsClientBuilder;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.model.*;
-
+import com.arannolan.coolapp.database.Database;
+import com.restfb.Version;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -16,13 +10,21 @@ import java.io.IOException;
 import java.net.URI;
 
 /**
- * Main class.
+ * App class.
  *
  * Program entry point, and initialisation of Grizzly HTTP server and DynamoDB.
  */
-public class Main {
+public class App {
     // Base URI the Grizzly HTTP server will listen on
     public static final String BASE_URI = "http://localhost:8080/myapp/";
+
+    // Facebook App ID and Secret
+    public static final String APP_ID = "1909908742603299";
+    public static final String APP_SECRET = "f36f601c8b1c7d1c2fea77e5e6009dc1";
+    public static final String APP_ACCESS_TOKEN = APP_ID + "|" + APP_SECRET;
+
+    // Facebook Graph API version to target
+    public static final Version GRAPH_API_VERSION = Version.VERSION_2_9;
 
     /**
      * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.
@@ -39,7 +41,7 @@ public class Main {
     }
 
     /**
-     * Main method.
+     * App method.
      * @param args
      * @throws IOException
      */
