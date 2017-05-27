@@ -18,7 +18,7 @@ public class Error {
      * @param additional Extra error information
      * @return Json object representing error message
      */
-    public static JsonObject getErrorResponse(String message, JsonObject additional) {
+    public static JsonObject generate(String message, JsonObject additional) {
         if (additional == null) {
             additional = new JsonObject();
         }

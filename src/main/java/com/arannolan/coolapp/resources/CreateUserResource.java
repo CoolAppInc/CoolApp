@@ -49,7 +49,7 @@ public class CreateUserResource {
         // ensure that accessToken query string was included
         if (token == null) {
             statusCode = 400;
-            message = Error.getErrorResponse(Error.MISSING_TOKEN, null);
+            message = Error.generate(Error.MISSING_TOKEN, null);
         } else {
             try {
                 // debug token to validate user access token
@@ -74,14 +74,14 @@ public class CreateUserResource {
                 } else {
                     // handle invalid user access token
                     statusCode = 400;
-                    message = Error.getErrorResponse(Error.MISSING_TOKEN, null);
+                    message = Error.generate(Error.MISSING_TOKEN, null);
                 }
 
             } catch (FacebookGraphException e) {
                 // handle facebook api call errors
                 statusCode = e.getHttpStatusCode();
 
-                message = Error.getErrorResponse(e.getErrorMessage(),
+                message = Error.generate(e.getErrorMessage(),
                         new JsonObject().put("code", e.getErrorCode()));
             }
         }
