@@ -12,9 +12,6 @@ import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
 import com.amazonaws.services.dynamodbv2.model.CreateTableResult;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
-import com.arannolan.coolapp.utils.FBApp;
-
-import java.util.Map;
 
 /**
  * Singleton class for database access.
