@@ -43,7 +43,7 @@ public class TestUsers {
      * User has:
      * No permissions       -- 400 bad request
      */
-    public static final String TEST_USER_D = "100390877225084";
+    public static final String TEST_USER_D = "100017554720010";
 
     /**
      * User has:
