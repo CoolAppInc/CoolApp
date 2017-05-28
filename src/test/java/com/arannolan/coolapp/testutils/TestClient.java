@@ -1,7 +1,6 @@
-package com.arannolan.coolapp.utils;
+package com.arannolan.coolapp.testutils;
 
 import com.arannolan.coolapp.App;
-import com.arannolan.coolapp.TestSuite;
 import com.restfb.json.JsonObject;
 import org.glassfish.grizzly.http.server.HttpServer;
 

@@ -1,8 +1,8 @@
 package com.arannolan.coolapp;
 
 import com.arannolan.coolapp.database.Database;
-import com.arannolan.coolapp.utils.TestClient;
-import com.arannolan.coolapp.utils.TestUsers;
+import com.arannolan.coolapp.testutils.TestClient;
+import com.arannolan.coolapp.testutils.TestUsers;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;

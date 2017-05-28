@@ -1,7 +1,7 @@
 package com.arannolan.coolapp;
 
-import com.arannolan.coolapp.utils.TestClient;
-import com.arannolan.coolapp.utils.TestUsers;
+import com.arannolan.coolapp.testutils.TestClient;
+import com.arannolan.coolapp.testutils.TestUsers;
 import com.restfb.json.JsonObject;
 import org.junit.Test;
 

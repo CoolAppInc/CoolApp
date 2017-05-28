@@ -1,4 +1,4 @@
-package com.arannolan.coolapp.utils;
+package com.arannolan.coolapp.testutils;
 
 import com.arannolan.coolapp.App;
 import com.arannolan.coolapp.database.Database;
