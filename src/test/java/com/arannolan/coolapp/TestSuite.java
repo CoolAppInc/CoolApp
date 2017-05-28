@@ -12,7 +12,9 @@ import org.junit.runners.Suite;
  * Test suite to setup database and start HTTP server and create client before tests are run.
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({PopularResourceTest.class})
+@Suite.SuiteClasses({
+        PopularResourceTest.class
+})
 public class TestSuite {
 
     /**
