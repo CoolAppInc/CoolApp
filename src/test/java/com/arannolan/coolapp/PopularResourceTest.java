@@ -16,7 +16,8 @@ public class PopularResourceTest {
     public static final String PATH = "popular";
 
     /**
-     * Test user with no friends receives false
+     * Test user with no friends receives message with
+     * "is_popular": false
      */
     @Test
     public void testNoFriends() {
@@ -24,7 +25,8 @@ public class PopularResourceTest {
     }
 
     /**
-     * Test user with 50 friends receives false
+     * Test user with 50 friends message with
+     * "is_popular": false
      */
     @Test
     public void testFiftyFriends() {
@@ -32,7 +34,8 @@ public class PopularResourceTest {
     }
 
     /**
-     * Test user with 51 friends receives true
+     * Test user with 51 friends message with
+     * "is_popular": true
      */
     @Test
     public void testFiftyOneFriends() {
@@ -62,5 +65,6 @@ public class PopularResourceTest {
         JsonObject message = client.request(PATH, accessToken);
 
         assertEquals(isPopular, message.getBoolean("is_popular"));
+        assertEquals(userId, message.getString("user_id"));
     }
 }
