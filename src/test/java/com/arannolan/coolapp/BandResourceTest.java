@@ -30,7 +30,7 @@ public class BandResourceTest {
     /**
      * Test user with 50 friends receives
      * { 'favourite_band': 'Queen'
-     *   'is_valid': false
+     *   'is_valid': true
      *   'user_id': userId
      * }
      */
