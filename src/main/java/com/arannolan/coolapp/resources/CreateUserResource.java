@@ -20,7 +20,7 @@ import javax.ws.rs.core.Response;
  *
  * Responds with JSON of the form
  * { "message": "User created"
- *   "userId": ID of new user
+ *   "user_id": ID of new user
  * }
  *
  * or an error
@@ -70,7 +70,7 @@ public class CreateUserResource {
                     statusCode = 201;
                     message = new JsonObject()
                             .put("message", "User created")
-                            .put("userId", newUser.getUserId());
+                            .put("user_id", newUser.getUserId());
                 } else {
                     // handle invalid user access token
                     statusCode = 400;

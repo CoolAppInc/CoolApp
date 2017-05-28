@@ -23,7 +23,7 @@ import java.util.List;
  *
  * Responds with json of the form
  * { [requested information]
- *   "userId": ID of user
+ *   "user_id": ID of user
  * }
  *
  * or an error
@@ -46,51 +46,57 @@ public abstract class GetResourceBase {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getIt(@QueryParam("accessToken") String token) {
+    public Response getIt(@QueryParam("access_token") String token) {
 
         int statusCode;
         JsonObject message;
 
-        try {
-            // debug token to validate user access token
-            FacebookClient fbClient = new DefaultFacebookClient(App.APP_ACCESS_TOKEN, App.GRAPH_API_VERSION);
-            FacebookClient.DebugTokenInfo debugToken = fbClient.debugToken(token);
+        // ensure that accessToken query string was included
+        if (token == null) {
+            statusCode = 400;
+            message = Error.generate(Error.MISSING_TOKEN, null);
+        } else {
+            try {
+                // debug token to validate user access token
+                FacebookClient fbClient = new DefaultFacebookClient(App.APP_ACCESS_TOKEN, App.GRAPH_API_VERSION);
+                FacebookClient.DebugTokenInfo debugToken = fbClient.debugToken(token);
 
-            // get userId corresponding to userToken
-            String userId = debugToken.getUserId();
+                // get userId corresponding to userToken
+                String userId = debugToken.getUserId();
 
-            // get list of permissions this token has
-            List<String> permissions = debugToken.getScopes();
+                // get list of permissions this token has
+                List<String> permissions = debugToken.getScopes();
 
-            if (userId == null) {
-                // malformed user access token
-                statusCode = 400;
-                message = Error.generate(Error.INVALID_TOKEN, null);
+                if (userId == null) {
+                    // malformed user access token
+                    statusCode = 400;
+                    message = Error.generate(Error.INVALID_TOKEN, null);
 
-            } else if (!Database.getInstance().hasUser(userId)) {
-                // user with this Id does not exist in database
-                statusCode = 400;
-                message = Error.generate(Error.USER_NOT_FOUND, null);
+                } else if (!Database.getInstance().hasUser(userId)) {
+                    // user with this Id does not exist in database
+                    statusCode = 400;
+                    message = Error.generate(Error.USER_NOT_FOUND, null);
 
-            } else if (!permissions.containsAll(requiredPermissions())) {
-                // user access token is missing some required permissions
-                List<String> missingPermissions = requiredPermissions();
-                missingPermissions.removeAll(permissions);
+                } else if (!permissions.containsAll(requiredPermissions())) {
+                    // user access token is missing some required permissions
+                    List<String> missingPermissions = requiredPermissions();
+                    missingPermissions.removeAll(permissions);
 
-                statusCode = 400;
-                message = Error.generate(Error.MISSING_PERMISSIONS,
-                        new JsonObject().put("permissions", new JsonArray(missingPermissions)));
+                    statusCode = 400;
+                    message = Error.generate(Error.MISSING_PERMISSIONS,
+                            new JsonObject().put("permissions", new JsonArray(missingPermissions)));
 
-            } else {
-                statusCode = 200;
-                message = processRequest(token).put("userId", userId);
+                } else {
+                    statusCode = 200;
+                    message = processRequest(token).put("user_id", userId);
 
+                }
+
+            } catch (FacebookGraphException e) {
+                // handle facebook graph api call errors
+                statusCode = e.getHttpStatusCode();
+                message = Error.generate(e.getErrorMessage(), new JsonObject().put("code", e.getErrorCode()));
             }
-
-        } catch (FacebookGraphException e) {
-            // handle facebook graph api call errors
-            statusCode = e.getHttpStatusCode();
-            message = Error.generate(e.getErrorMessage(), new JsonObject().put("code", e.getErrorCode()));
         }
 
         return Response.status(statusCode).entity(message.toString()).build();
