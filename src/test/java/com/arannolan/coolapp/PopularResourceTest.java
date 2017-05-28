@@ -17,7 +17,9 @@ public class PopularResourceTest {
 
     /**
      * Test user with no friends receives message with
-     * "is_popular": false
+     * { "is_popular": false
+     *   "user_id: userId
+     * }
      */
     @Test
     public void testNoFriends() {
@@ -26,8 +28,10 @@ public class PopularResourceTest {
 
     /**
      * Test user with 50 friends message with
-     * "is_popular": false
-     */
+     * { "is_popular": false
+     *   "user_id: userId
+     * }
+     * */
     @Test
     public void testFiftyFriends() {
         testFriends(TestUsers.TEST_USER_B, false);
@@ -35,7 +39,9 @@ public class PopularResourceTest {
 
     /**
      * Test user with 51 friends message with
-     * "is_popular": true
+     * { "is_popular": true
+     *   "user_id: userId
+     * }
      */
     @Test
     public void testFiftyOneFriends() {
