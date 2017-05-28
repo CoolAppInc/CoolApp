@@ -74,7 +74,7 @@ public class CreateUserResource {
                 } else {
                     // handle invalid user access token
                     statusCode = 400;
-                    message = Error.generate(Error.MISSING_TOKEN, null);
+                    message = Error.generate(Error.INVALID_TOKEN, null);
                 }
 
             } catch (FacebookGraphException e) {

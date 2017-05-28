@@ -6,6 +6,7 @@ import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.document.DeleteItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.Table;
@@ -18,30 +19,41 @@ import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
  */
 public class Database {
 
+    // Database settings:
     public static final String ENDPOINT = "http://localhost:8000";
     public static final String REGION = "us-west-2";
-
     public static final String ACCESS_KEY = "";
     public static final String SECRET_KEY = "";
 
+    /**
+     * User table
+     *
+     * Fields:
+     *   String userId     -- primary key
+     *   String firstName
+     *   String lastName
+     */
     public static final String USER_TABLE_NAME = "Users";
 
     private static Database instance = null;
-
     private final AmazonDynamoDB client;
 
     /**
-     * Connect to and initialise DynamoDB
-     *
-     * private to prevent other classes from instantiating
+     * Connect to and initialise DynamoDB.
      */
-    private Database() {
+    private Database(String endpoint, String region, String accessKey, String secretKey) {
         // connect to local DynamoDB
          client = AmazonDynamoDBClientBuilder.standard()
-                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(ENDPOINT, REGION))
-                .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(ACCESS_KEY, SECRET_KEY)))
+                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endpoint, region))
+                .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
                 .build();
+         initTables();
+    }
 
+    /**
+     * Check that the required tables exist in the database and create if not.
+     */
+    private void initTables() {
         // check that User table exists, and create if not
         if (!client.listTables().getTableNames().contains(USER_TABLE_NAME)) {
             try {
@@ -65,7 +77,10 @@ public class Database {
      * @return database object
      */
     public static Database getInstance () {
-        if (instance == null) instance = new Database(); // use lazy loading
+        if (instance == null) {
+            // create database with default settings
+            instance = new Database(ENDPOINT, REGION, ACCESS_KEY, SECRET_KEY);
+        }
         return instance;
     }
 
@@ -79,6 +94,15 @@ public class Database {
     }
 
     /**
+     * Delete user with given Id
+     * @param userId Id of user to be deleted
+     */
+    public void deleteUser(String userId) {
+        Table table = new DynamoDB(client).getTable(USER_TABLE_NAME);
+        table.deleteItem("userId", userId);
+    }
+
+    /**
      * Check if user with this Id exists in the DB.
      * @param userId
      * @return true if user with this Id exists in the DB, false otherwise
@@ -88,5 +112,24 @@ public class Database {
         // try find user with given Id, item is null if not found
         Item item = table.getItem("userId", userId);
         return item != null;
+    }
+
+    /**
+     * Create a database instance with given configuration.
+     * Used for testing.
+     *
+     * @return database object with given config
+     */
+    public static Database create(String endpoint, String region, String accessKey, String secretKey) {
+        instance = new Database(endpoint, region, accessKey, secretKey);
+        return instance;
+    }
+
+    /**
+     * Destroy the old database instance.
+     * Used for testing.
+     */
+    public static void destroy() {
+        instance = null;
     }
 }

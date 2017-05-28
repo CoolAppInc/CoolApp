@@ -30,14 +30,14 @@ public class App {
      * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.
      * @return Grizzly HTTP server.
      */
-    public static HttpServer startServer() {
+    public static HttpServer startServer(String baseUri) {
         // create a resource config that scans for JAX-RS resources and providers
         // in com.arannolan.coolapp package
         final ResourceConfig rc = new ResourceConfig().packages("com.arannolan.coolapp");
 
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI
-        return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
+        return GrizzlyHttpServerFactory.createHttpServer(URI.create(baseUri), rc);
     }
 
     /**
@@ -50,11 +50,11 @@ public class App {
         Database.getInstance();
 
         // create Grizzly server
-        final HttpServer server = startServer();
+        final HttpServer server = startServer(BASE_URI);
         System.out.println(String.format("Jersey app started with WADL available at "
                 + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));
         System.in.read();
-        server.stop();
+        server.shutdownNow();
     }
 }
 
