@@ -6,7 +6,6 @@ import com.restfb.json.JsonObject;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for user favourite band GET request.
