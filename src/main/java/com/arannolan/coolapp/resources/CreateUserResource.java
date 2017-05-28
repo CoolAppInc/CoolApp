@@ -16,11 +16,11 @@ import javax.ws.rs.core.Response;
 /**
  * Resource class to handle POST requests to create a new user.
  *
- * Query Parameter: access_token -- Facebook API user access token corresponding to account being created
+ * Query Parameters: 'access_token' -- Facebook API user access token corresponding to account being created
  *
  * Responds with JSON of the form
  * { "message": "User created"
- *   "userId": [ID of new user]
+ *   "userId": ID of new user
  * }
  *
  * or an error
@@ -80,9 +80,7 @@ public class CreateUserResource {
             } catch (FacebookGraphException e) {
                 // handle facebook api call errors
                 statusCode = e.getHttpStatusCode();
-
-                message = Error.generate(e.getErrorMessage(),
-                        new JsonObject().put("code", e.getErrorCode()));
+                message = Error.generate(e.getErrorMessage(), new JsonObject().put("code", e.getErrorCode()));
             }
         }
 

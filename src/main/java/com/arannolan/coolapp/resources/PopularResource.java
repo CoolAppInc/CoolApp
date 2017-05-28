@@ -23,13 +23,13 @@ import java.util.List;
  *   "userId": ID of user
  * }
  * or an error response (see super class for description)
- * 
+ *
  */
 @Path("popular")
 public class PopularResource extends GetResourceBase {
 
     /**
-     * Method to get user popularity information message.
+     * Method to fetch information on users popularity.
      *
      * @param token Facebook user access token corresponding to user
      * @return Json object containing popularity information

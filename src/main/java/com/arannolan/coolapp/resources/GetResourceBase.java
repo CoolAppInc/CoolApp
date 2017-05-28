@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Abstract class to act as base for other user information GET requests.
  *
- * Query Parameter: accessToken -- Facebook API user access token corresponding to account being created
+ * Query Parameters: 'access_token' -- Facebook API user access token corresponding to account being created
  *
  * Responds with json of the form
  * { [requested information]
@@ -97,7 +97,7 @@ public abstract class GetResourceBase {
     }
 
     /**
-     * Method to create the user information response message for the GET request
+     * Method to create the user information response message for the GET request.
      *
      * @param token Facebook user access token corresponding to user
      * @return Information response message in as JsonObject
@@ -105,7 +105,7 @@ public abstract class GetResourceBase {
     protected abstract JsonObject processRequest(String token);
 
     /**
-     * Method to return list of permissions required by the user information GET request
+     * Method to return list of permissions required by the user information GET request.
      *
      * @return List of required permissions
      */
