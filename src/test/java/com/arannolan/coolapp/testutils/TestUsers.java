@@ -46,6 +46,18 @@ public class TestUsers {
     public static final String TEST_USER_D = "100017554720010";
 
     /**
+     * To be added as new user to database
+     */
+    public static final String TEST_USER_E = "108921803033250";
+
+    /**
+     * To overwrite old user information in database with
+     * firstName = "Test"
+     * lastName = "F"
+     */
+    public static final String TEST_USER_F = "102242187039650";
+
+    /**
      * User has:
      * Several liked bands  -- has favourite band: 'Queen'
      */
@@ -108,7 +120,7 @@ public class TestUsers {
     }
 
     /**
-     * Add and remove appropriate test users from database.
+     * Add and remove appropriate test users from database, using dummy names.
      */
     public static void initDatabaseTestUsers(String[] removeUsers, String[] addUsers) {
         Database database = Database.getInstance();
@@ -118,7 +130,7 @@ public class TestUsers {
         }
 
         for (String userId: addUsers) {
-            database.addUser(new User(userId, "test", "user"));
+            database.addUser(new User(userId, "John", "Smith"));
         }
     }
 }
