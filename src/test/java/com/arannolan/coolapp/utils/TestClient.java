@@ -32,6 +32,13 @@ public class TestClient {
         target = c.target(BASE_URI);
     }
 
+    /**
+     * Get an instance of a test client.
+     *
+     * Will spawn a test server if instance does not yet exist
+     *
+     * @return Test client instance
+     */
     public static TestClient getInstance() {
         if (instance == null) {
             instance = new TestClient();
@@ -39,10 +46,21 @@ public class TestClient {
         return instance;
     }
 
+    /**
+     * Shutdown the test server, and clear instance of test client
+     */
     public void stop() {
         server.shutdownNow();
+        instance = null;
     }
 
+    /**
+     * Make request to test server.
+     *
+     * @param path Resource path
+     * @param accessToken Query parameter 'access_token'
+     * @return JsonObject response message
+     */
     public JsonObject request(String path, String accessToken) {
         String message;
         if (accessToken == null) {
@@ -53,6 +71,13 @@ public class TestClient {
         return new JsonObject(message);
     }
 
+    /**
+     * Make and check that request returns '400 Bad Response'
+     *
+     * @param path Resource path
+     * @param accessToken Query parameter 'access_token'
+     * @return True if '400 Bad Response' received, false otherwise
+     */
     public boolean badRequestCheck(String path, String accessToken) {
         try {
             request(path, accessToken);
