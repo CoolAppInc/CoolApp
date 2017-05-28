@@ -13,7 +13,8 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        PopularResourceTest.class
+        PopularResourceTest.class,
+        BandResourceTest.class
 })
 public class TestSuite {
 
