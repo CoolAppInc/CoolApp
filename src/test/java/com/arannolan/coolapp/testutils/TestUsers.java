@@ -6,7 +6,6 @@ import com.arannolan.coolapp.database.User;
 import com.restfb.Connection;
 import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
-import com.restfb.json.JsonArray;
 import com.restfb.json.JsonObject;
 
 import java.util.HashMap;
