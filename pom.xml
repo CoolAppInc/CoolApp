@@ -11,6 +11,7 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- Jersey used for RESTful web service -->
             <dependency>
                 <groupId>org.glassfish.jersey</groupId>
                 <artifactId>jersey-bom</artifactId>
@@ -22,11 +23,13 @@
     </dependencyManagement>
 
     <dependencies>
+        <!-- Using Jersey with Grizzly -->
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-grizzly2-http</artifactId>
         </dependency>
 
+        <!-- Testing using JUnit -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -34,12 +37,14 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Facebook Graph API client -->
         <dependency>
             <groupId>com.restfb</groupId>
             <artifactId>restfb</artifactId>
             <version>1.41.0</version>
         </dependency>
 
+        <!-- Amazon DynamoDB SDK -->
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-dynamodb</artifactId>
@@ -49,6 +54,7 @@
 
     <build>
         <plugins>
+            <!-- Compile for Java 8 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -59,6 +65,8 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+
+            <!-- App entry point -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -69,12 +77,13 @@
                             <goal>java</goal>
                         </goals>
                     </execution>
-
                 </executions>
                 <configuration>
                     <mainClass>${mainClass}</mainClass>
                 </configuration>
             </plugin>
+
+            <!-- Plugin to create uber-jar -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -87,7 +96,7 @@
                         </goals>
                         <configuration>
                             <transformers>
-                                <!-- add Main-Class to manifest file -->
+                                <!-- add Main-Class to manifest file to make executable jar -->
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>${mainClass}</mainClass>
                                 </transformer>
@@ -99,6 +108,8 @@
                     <createDependencyReducedPom>false</createDependencyReducedPom>
                 </configuration>
             </plugin>
+
+            <!-- Plugin for unit testing -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
