@@ -46,7 +46,7 @@ public class PlaceResourceTest {
         String accessToken = TestUsers.getAccessToken(TestUsers.TEST_USER_D);
         TestClient client = TestClient.getInstance();
 
-        assertEquals(true, client.badRequestCheck(PATH, accessToken));
+        assertEquals(true, client.badGetRequest(PATH, accessToken));
     }
 
     /**
@@ -58,7 +58,7 @@ public class PlaceResourceTest {
     private void testFavouritePlace(String userId, String placeName) {
         String accessToken = TestUsers.getAccessToken(userId);
         TestClient client = TestClient.getInstance();
-        JsonObject message = client.request(PATH, accessToken);
+        JsonObject message = client.getRequest(PATH, accessToken);
 
         boolean isValid = placeName != null;
 

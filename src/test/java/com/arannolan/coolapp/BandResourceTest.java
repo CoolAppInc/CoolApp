@@ -46,7 +46,7 @@ public class BandResourceTest {
         String accessToken = TestUsers.getAccessToken(TestUsers.TEST_USER_D);
         TestClient client = TestClient.getInstance();
 
-        assertEquals(true, client.badRequestCheck(PATH, accessToken));
+        assertEquals(true, client.badGetRequest(PATH, accessToken));
     }
 
     /**
@@ -58,7 +58,7 @@ public class BandResourceTest {
     private void testFavouriteBand(String userId, String bandName) {
         String accessToken = TestUsers.getAccessToken(userId);
         TestClient client = TestClient.getInstance();
-        JsonObject message = client.request(PATH, accessToken);
+        JsonObject message = client.getRequest(PATH, accessToken);
 
         boolean isValid = bandName != null;
 

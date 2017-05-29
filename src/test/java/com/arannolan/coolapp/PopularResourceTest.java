@@ -56,7 +56,7 @@ public class PopularResourceTest {
         String accessToken = TestUsers.getAccessToken(TestUsers.TEST_USER_D);
         TestClient client = TestClient.getInstance();
 
-        assertEquals(true, client.badRequestCheck(PATH, accessToken));
+        assertEquals(true, client.badGetRequest(PATH, accessToken));
     }
 
     /**
@@ -68,7 +68,7 @@ public class PopularResourceTest {
     private void testFriends(String userId, boolean isPopular) {
         String accessToken = TestUsers.getAccessToken(userId);
         TestClient client = TestClient.getInstance();
-        JsonObject message = client.request(PATH, accessToken);
+        JsonObject message = client.getRequest(PATH, accessToken);
 
         assertEquals(isPopular, message.getBoolean("is_popular"));
         assertEquals(userId, message.getString("user_id"));
