@@ -54,7 +54,7 @@ public class App {
         System.out.println(String.format(
                 "Jersey app started with base URI %s\n" +
                 "WADL available at %sapplication.wadl\n" +
-                "Hit enter to stop server...", BASE_URI, BASE_URI));
+                "Hit enter to stop app...", BASE_URI, BASE_URI));
         System.in.read();
         server.shutdownNow();
     }
