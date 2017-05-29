@@ -34,6 +34,8 @@ import javax.ws.rs.core.Response;
 @Path("createUser")
 public class CreateUserResource {
 
+    public static final String CREATED_MSG = "User created";
+
     /**
      * Method handling HTTP POST requests for user creation.
      *
@@ -63,13 +65,13 @@ public class CreateUserResource {
                     com.restfb.types.User fbUser = fbUserClient.fetchObject("me", com.restfb.types.User.class);
 
                     // create new DB user from facebook user information
-                    User newUser = new User(fbUser.getId(), fbUser.getFirstName(), fbUser.getLastName());
+                    User newUser = new User(fbUser.getId(), fbUser.getName());
                     Database.getInstance().addUser(newUser);
 
                     // respond with user created if successful
                     statusCode = 201;
                     message = new JsonObject()
-                            .put("message", "User created")
+                            .put("message", CREATED_MSG)
                             .put("user_id", newUser.getUserId());
                 } else {
                     // handle invalid user access token

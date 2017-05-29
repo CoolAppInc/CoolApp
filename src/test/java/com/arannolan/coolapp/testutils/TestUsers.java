@@ -120,7 +120,7 @@ public class TestUsers {
     }
 
     /**
-     * Add and remove appropriate test users from database, using dummy names.
+     * Add and remove appropriate test users from database, using dummy name.
      */
     public static void initDatabaseTestUsers(String[] removeUsers, String[] addUsers) {
         Database database = Database.getInstance();
@@ -130,7 +130,7 @@ public class TestUsers {
         }
 
         for (String userId: addUsers) {
-            database.addUser(new User(userId, "John", "Smith"));
+            database.addUser(new User(userId, "Agent Smith"));
         }
     }
 }

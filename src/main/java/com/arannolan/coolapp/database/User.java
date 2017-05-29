@@ -11,25 +11,26 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 public class User {
 
     private String userId; // facebook user ID
-    private String firstName;
-    private String lastName;
+    private String name;
 
     @DynamoDBHashKey
     public String getUserId() { return userId; }
     public void setUserId(String userId) { this.userId = userId; }
 
     @DynamoDBAttribute
-    public String getFirstName() { return firstName; }
-    public void setFirstName(String firstName) { this.firstName = firstName; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    @DynamoDBAttribute
-    public String getLastName() { return lastName; }
-    public void setLastName(String lastName) { this.lastName = lastName; }
+    /**
+     * Parameter-less constructor needed for mapper
+     */
+    public User() {}
 
-    public User(String userId, String firstName, String lastName) {
+    /**
+     * Convenient User object constructor
+     */
+    public User(String userId, String name) {
         this.userId = userId;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.name = name;
     }
-
 }

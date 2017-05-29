@@ -10,9 +10,12 @@ import com.amazonaws.services.dynamodbv2.document.DeleteItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.Table;
+import com.amazonaws.services.dynamodbv2.document.spec.ScanSpec;
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
 import com.amazonaws.services.dynamodbv2.model.CreateTableResult;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
+
+import java.util.Map;
 
 /**
  * Singleton class for database access.
@@ -27,11 +30,10 @@ public class Database {
 
     /**
      * User table
-     *
+     * <p>
      * Fields:
-     *   String userId     -- primary key
-     *   String firstName
-     *   String lastName
+     * String userId     -- primary key
+     * String name
      */
     public static final String USER_TABLE_NAME = "Users";
 
@@ -43,11 +45,11 @@ public class Database {
      */
     private Database(String endpoint, String region, String accessKey, String secretKey) {
         // connect to local DynamoDB
-         client = AmazonDynamoDBClientBuilder.standard()
+        client = AmazonDynamoDBClientBuilder.standard()
                 .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endpoint, region))
                 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
                 .build();
-         initTables();
+        initTables();
     }
 
     /**
@@ -74,9 +76,10 @@ public class Database {
 
     /**
      * Get instance of singleton database object.
+     *
      * @return database object
      */
-    public static Database getInstance () {
+    public static Database getInstance() {
         if (instance == null) {
             // create database with default settings
             instance = new Database(ENDPOINT, REGION, ACCESS_KEY, SECRET_KEY);
@@ -86,6 +89,7 @@ public class Database {
 
     /**
      * Add a new user to the database.
+     *
      * @param user object representing new user to be added to database
      */
     public void addUser(User user) {
@@ -95,6 +99,7 @@ public class Database {
 
     /**
      * Delete user with given Id
+     *
      * @param userId Id of user to be deleted
      */
     public void deleteUser(String userId) {
@@ -104,14 +109,23 @@ public class Database {
 
     /**
      * Check if user with this Id exists in the DB.
+     *
      * @param userId
      * @return true if user with this Id exists in the DB, false otherwise
      */
     public boolean hasUser(String userId) {
-        Table table = new DynamoDB(client).getTable(USER_TABLE_NAME);
-        // try find user with given Id, item is null if not found
-        Item item = table.getItem("userId", userId);
-        return item != null;
+        return getUser(userId) != null;
+    }
+
+    /**
+     * Get a user item from the database.
+     *
+     * @param userId
+     * @return User object representing user, or null if not found
+     */
+    public User getUser(String userId) {
+        DynamoDBMapper mapper = new DynamoDBMapper(client);
+        return mapper.load(User.class, userId);
     }
 
     /**
