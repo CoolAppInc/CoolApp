@@ -45,7 +45,7 @@ public class TestUsers {
      * User has:
      * No permissions       -- 400 bad request
      */
-    public static final String TEST_USER_D = "103572760238891";
+    public static final String TEST_USER_D = "103199216941555";
 
     /**
      * To be added as new user to database
@@ -99,6 +99,9 @@ public class TestUsers {
                 }
             }
         }
+
+        //
+
 
         // add public user test account, for 'favourite band' get request test
         accessTokens.put(PUBILC_USER_ID, PUBILC_USER_TOKEN);

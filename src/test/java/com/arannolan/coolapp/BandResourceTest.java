@@ -2,6 +2,7 @@ package com.arannolan.coolapp;
 
 import com.arannolan.coolapp.testutils.TestClient;
 import com.arannolan.coolapp.testutils.TestUsers;
+import com.arannolan.coolapp.utils.Error;
 import com.restfb.json.JsonObject;
 import org.junit.Test;
 
@@ -41,14 +42,23 @@ public class BandResourceTest {
     }
 
     /**
-     * Test access token with 'user_likes' permission missing receives 400 Bad Request
+     * Test access token with 'user_likes' permission missing.
      */
     @Test
     public void testMissingLikesPermission() {
         String accessToken = TestUsers.getAccessToken(TestUsers.TEST_USER_D);
         TestClient client = TestClient.getInstance();
 
-        assertEquals(true, client.badGetRequest(PATH, accessToken));
+        // Make request
+        JsonObject message = client.getRequest(PATH, accessToken).getJsonObject("error");
+
+        // Check error message
+        String errorMsg = message.getString("message");
+        assertEquals(Error.MISSING_PERMISSIONS, errorMsg);
+
+        // Check missing permissions
+        String permission = message.getJsonArray("permissions").getString(0);
+        assertEquals("user_likes", permission);
     }
 
     /**

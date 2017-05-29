@@ -8,6 +8,7 @@ import javax.ws.rs.BadRequestException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Response;
 
 /**
  * Singleton class for use as a test client.
@@ -61,29 +62,13 @@ public class TestClient {
      * @return JsonObject response message
      */
     public JsonObject getRequest(String path, String accessToken) {
-        String message;
+        Response response;
         if (accessToken == null) {
-            message = target.path(path).request().get(String.class);
+            response = target.path(path).request().get();
         } else {
-            message = target.path(path).queryParam("access_token", accessToken).request().get(String.class);
+            response = target.path(path).queryParam("access_token", accessToken).request().get();
         }
-        return new JsonObject(message);
-    }
-
-    /**
-     * Make and check that GET request returns '400 Bad Response'
-     *
-     * @param path Resource path
-     * @param accessToken Query parameter 'access_token'
-     * @return True if '400 Bad Response' received, false otherwise
-     */
-    public boolean badGetRequest(String path, String accessToken) {
-        try {
-            getRequest(path, accessToken);
-            return false;
-        } catch (BadRequestException e) {
-            return true;
-        }
+        return new JsonObject(response.readEntity(String.class));
     }
 
     /**
@@ -94,29 +79,12 @@ public class TestClient {
      * @return JsonObject response message
      */
     public JsonObject postRequest(String path, String accessToken) {
-        String message;
+        Response response;
         if (accessToken == null) {
-            message = target.path(path).request().buildPost(null).invoke(String.class);
+            response = target.path(path).request().buildPost(null).invoke();
         } else {
-            message = target.path(path).queryParam("access_token", accessToken)
-                    .request().buildPost(null).invoke(String.class);
+            response = target.path(path).queryParam("access_token", accessToken).request().buildPost(null).invoke();
         }
-        return new JsonObject(message);
-    }
-
-    /**
-     * Make and check that POST request returns '400 Bad Response'
-     *
-     * @param path Resource path
-     * @param accessToken Query parameter 'access_token'
-     * @return True if '400 Bad Response' received, false otherwise
-     */
-    public boolean badPostRequest(String path, String accessToken) {
-        try {
-            postRequest(path, accessToken);
-            return false;
-        } catch (BadRequestException e) {
-            return true;
-        }
+        return new JsonObject(response.readEntity(String.class));
     }
 }
