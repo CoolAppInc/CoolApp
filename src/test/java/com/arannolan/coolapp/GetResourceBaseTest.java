@@ -26,6 +26,15 @@ public class GetResourceBaseTest {
     }
 
     /**
+     * Test request with empty query parameter 'access_token' receives '400 Bad Request'.
+     */
+    @Test
+    public void emptyTokenTest() {
+        TestClient client = TestClient.getInstance();
+        assertEquals(true, client.badPostRequest(PATH, ""));
+    }
+
+    /**
      * Test request with malformed access token receives '400 Bad Request'.
      */
     @Test

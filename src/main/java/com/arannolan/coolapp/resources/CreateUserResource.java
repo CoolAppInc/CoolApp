@@ -49,7 +49,7 @@ public class CreateUserResource {
         JsonObject message;
 
         // ensure that accessToken query string was included
-        if (token == null) {
+        if (token == null || token.isEmpty()) {
             statusCode = 400;
             message = Error.generate(Error.MISSING_TOKEN, null);
         } else {
