@@ -16,7 +16,7 @@ import java.net.URI;
  */
 public class App {
     // Base URI the Grizzly HTTP server will listen on
-    public static final String BASE_URI = "http://localhost:8080/myapp/";
+    public static final String BASE_URI = "http://localhost:8080/coolapp/";
 
     // Facebook App ID and Secret
     public static final String APP_ID = "1909908742603299";
@@ -51,8 +51,10 @@ public class App {
 
         // create Grizzly server
         final HttpServer server = startServer(BASE_URI);
-        System.out.println(String.format("Jersey app started with WADL available at "
-                + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));
+        System.out.println(String.format(
+                "Jersey app started with base URI %s\n" +
+                "WADL available at %sapplication.wadl\n" +
+                "Hit enter to stop server...", BASE_URI, BASE_URI));
         System.in.read();
         server.shutdownNow();
     }
