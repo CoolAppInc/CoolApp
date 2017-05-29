@@ -14,7 +14,8 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         PopularResourceTest.class,
-        BandResourceTest.class
+        BandResourceTest.class,
+        CreateUserResourceTest.class
 })
 public class TestSuite {
 
