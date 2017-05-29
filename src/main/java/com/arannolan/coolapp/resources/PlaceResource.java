@@ -82,10 +82,12 @@ public class PlaceResource extends GetResourceBase {
         Map<String, Integer> map = new HashMap<>();
 
         // count occurrences of each location
-        for (JsonObject place: places.getData()) {
-            String name = place.getJsonObject("place").getString("name");
-            int count = map.getOrDefault(name, 0) + 1;
-            map.put(name, count);
+        for (List<JsonObject> placePage: places) {
+            for(JsonObject place: placePage) {
+                String name = place.getJsonObject("place").getString("name");
+                int count = map.getOrDefault(name, 0) + 1;
+                map.put(name, count);
+            }
         }
 
         // find location that occurs the most

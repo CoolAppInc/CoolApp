@@ -76,12 +76,14 @@ public class BandResource extends GetResourceBase {
         String bandName = null;
         long minTime = Long.MAX_VALUE;
 
-        for (JsonObject band: bands.getData()) {
-            long time = band.getLong("created_time");
+        for (List<JsonObject> bandPage: bands) {
+            for (JsonObject band: bandPage) {
+                long time = band.getLong("created_time");
 
-            if (time < minTime) {
-                minTime = time;
-                bandName = band.getString("name");
+                if (time < minTime) {
+                    minTime = time;
+                    bandName = band.getString("name");
+                }
             }
         }
 

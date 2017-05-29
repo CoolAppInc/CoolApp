@@ -3,12 +3,14 @@ package com.arannolan.coolapp.testutils;
 import com.arannolan.coolapp.App;
 import com.arannolan.coolapp.database.Database;
 import com.arannolan.coolapp.database.User;
+import com.restfb.Connection;
 import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.json.JsonArray;
 import com.restfb.json.JsonObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -43,7 +45,7 @@ public class TestUsers {
      * User has:
      * No permissions       -- 400 bad request
      */
-    public static final String TEST_USER_D = "100017554720010";
+    public static final String TEST_USER_D = "103572760238891";
 
     /**
      * To be added as new user to database
@@ -83,18 +85,18 @@ public class TestUsers {
 
         // get data on all test users
         FacebookClient fbClient = new DefaultFacebookClient(App.APP_ACCESS_TOKEN, App.GRAPH_API_VERSION);
-        JsonArray testUserData = fbClient
-                .fetchObject(App.APP_ID + "/accounts/test-users", JsonObject.class)
-                .getJsonArray("data");
+        Connection<JsonObject> testUserData = fbClient
+                .fetchConnection(App.APP_ID + "/accounts/test-users", JsonObject.class);
 
         // store any with access tokens available
         accessTokens = new HashMap<>();
-        for (int i = 0; i < testUserData.length(); i++) {
-            JsonObject testUser = testUserData.getJsonObject(i);
-            if (testUser.has("access_token")) {
-                String id = testUser.getString("id");
-                String token = testUser.getString("access_token");
-                accessTokens.put(id, token);
+        for (List<JsonObject> testUserPage: testUserData) {
+            for (JsonObject testUser: testUserPage) {
+                if (testUser.has("access_token")) {
+                    String id = testUser.getString("id");
+                    String token = testUser.getString("access_token");
+                    accessTokens.put(id, token);
+                }
             }
         }
 
