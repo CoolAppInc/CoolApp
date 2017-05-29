@@ -12,6 +12,8 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * Tests create user POST request.
+ *
+ * To be run as part of TestSuit
  */
 public class CreateUserResourceTest {
 

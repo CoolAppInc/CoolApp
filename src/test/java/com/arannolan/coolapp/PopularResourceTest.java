@@ -10,6 +10,8 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * Tests for user popularity GET request.
+ *
+ * To be run as part of TestSuit
  */
 public class PopularResourceTest {
 

@@ -9,6 +9,8 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * Tests for user favourite place GET request.
+ *
+ * To be run as part of TestSuit
  */
 public class PlaceResourceTest {
 
