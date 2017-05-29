@@ -1,11 +1,6 @@
 package com.arannolan.coolapp;
 
-import com.arannolan.coolapp.database.Database;
-import com.arannolan.coolapp.database.User;
-import com.arannolan.coolapp.resources.CreateUserResource;
 import com.arannolan.coolapp.testutils.TestClient;
-import com.arannolan.coolapp.testutils.TestUsers;
-import com.restfb.json.JsonObject;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
