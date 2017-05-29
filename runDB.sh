@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
 PROG_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-DB_DIR="DynamoDB"
+DB_DIR="$PROG_ROOT/DynamoDB"
 DB_DOWNLOAD="https://s3.eu-central-1.amazonaws.com/dynamodb-local-frankfurt/dynamodb_local_latest.zip"
 DB_COMPR="dynamodb_local_latest.zip"
 
 # check if DynamoDB directory exists
 # prompt user to download DynamoDB if not
-if [ ! -d "$PROG_ROOT/$DB_DIR" ]; then
+if [ ! -d "$DB_DIR" ]; then
 	echo -n "Directory '$DB_DIR' not found. Download DynamoDB now? [Y/n]: "
 	read input
 	if [ "$input" = "n" ] || [ "$input" = "N" ]; then
@@ -32,7 +32,7 @@ if [ ! -d "$PROG_ROOT/$DB_DIR" ]; then
 
 	# extract into DB_DIR
 	echo "Extracting DynamoDB"
-	unzip -q "$DB_COMPR" -d "$PROG_ROOT/$DB_DIR"
+	unzip -q "$DB_COMPR" -d "$DB_DIR"
 	# clean up
 	rm "$DB_COMPR" "$DB_COMPR.sha256"
 	
@@ -41,6 +41,6 @@ if [ ! -d "$PROG_ROOT/$DB_DIR" ]; then
 fi
 
 # run DynamoDB
-java -Djava.library.path=./DynamoDBLocal_lib -jar "$DB_DIR/DynamoDBLocal.jar"
+java -Djava.library.path=./DynamoDBLocal_lib -jar "$DB_DIR/DynamoDBLocal.jar" -dbPath "$DB_DIR"
 
 exit 0
