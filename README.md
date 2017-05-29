@@ -24,7 +24,7 @@ To test the project
 mvn test
 ```
 
-To create an executable jar file `target/coolapp[VERSON].jar` of the app
+To create an executable jar file `target/coolapp-[VERSON].jar` of the app
 ```
 mvn package
 ```
@@ -114,3 +114,25 @@ Status code: 200
 ```
 curl -i http://{app_base_uri}/place?access_token={user_access_token}
 ```
+
+<hr>
+
+### Errors
+Error responses are given as JSON with the following format
+```
+ * { "error": {
+ *     "message": [Error message],
+ *     [Additional fields]
+ *   }
+ * }
+```
+
+The following error messages are returned with a status code of 400 'Bad Request':
+* `User does not exist` : The access token is well formed, but the user is not in the database.
+* `Malformed user access token` : The access token is malformed, or could not be understood.
+* `Missing required permissions`: One or more required permisions for the request are missing from the access token provided.
+* `Query parameter 'access_token' missing from request`: The query parameter `access_token` left empty or was entirely excluded from the request.
+
+#### Additional fields
+* `"permissions"`: A list of permissions that were missing from the request.
+* `"code"`: If a Facebook Graph API exception is thrown, its message and [error code](http://fbdevwiki.com/wiki/Error_codes) is forwarded on.
